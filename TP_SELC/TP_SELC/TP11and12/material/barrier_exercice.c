@@ -10,6 +10,7 @@
 
 #include "barrier_semaph.h"
 
+
 sem_t * lock_for_shared_variables;
 sem_t * sem_for_barrier;
 
@@ -38,11 +39,13 @@ int main(int argc, char *argv[]) {
   actors_number = atoi(argv[1]);
 
   /* Create and initialize semaphores */
-  
+
   /*
    *  TO BE COMPLETED using identifiers of semaphores defined in
    *  barrier_semaph.h
    */
+     lock_for_shared_variables = sem_open(LOCK_FOR_SHARED_VARIABLES_NAME, O_CREAT, 0644, actors_number);
+     sem_for_barrier = sem_open(SEM_FOR_BARRIER_NAME, O_CREAT, 0644, actors_number);
 
   /* Open and initialize the file containing the shared information: the number
    * of actors that reached the barrier.
@@ -68,10 +71,34 @@ int main(int argc, char *argv[]) {
   /* Destruction of semaphores */
 
   /* TO BE COMPLETED  */
+    int a = actor_function;
+    switch(i){
+      case 0 :
+        while(a--){
+          sem_post(sem_for_barrier);
+        }
+
+      default : exec()
+
+    }
+    sem_close(lock_for_shared_variables);
+    sem_unlink(LOCK_FOR_SHARED_VARIABLES_NAME);
+    sem_close(sem_for_barrier);
+    sem_unlink(sem_for_barrier);
+
+
+
 
   printf("main - %s : this is the end ... \n", argv[0]);
   exit(0);
 }
+
+
+
+
+
+
+
 
 /********************** acteur  ***********************/
 void actor_function(int actor_id){
